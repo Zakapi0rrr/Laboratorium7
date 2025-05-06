@@ -128,9 +128,7 @@ namespace Laboratorium7
         private void FilterContact_Click(object sender, RoutedEventArgs e)
         {
             var filterWindow = new FilterWindow();
-            filterWindow.Title = "Filtruj kontakty";
             filterWindow.ShowDialog();
-            //odwolanie do selected filter :)
             var filter = filterWindow.SelectedFilter;
             using (var context = new ContactContext())
             {
@@ -147,6 +145,11 @@ namespace Laboratorium7
                 if (filter.isLastName == true)
                 {
                     query = query.Where(c => !string.IsNullOrEmpty(c.LastName));
+                }
+                Contacts.Clear();
+                foreach (var contact in query.ToList())
+                {
+                    Contacts.Add(contact);
                 }
             }
         }
@@ -175,6 +178,24 @@ namespace Laboratorium7
         {
             LoadContacts();
         }
+        //sortowanie asc/desc po imieniu
+        private bool sortAscending = true;
+
+        private void Sort_Click(object sender, RoutedEventArgs e)
+        {
+            var sorted = sortAscending
+                ? Contacts.OrderBy(c => c.FirstName).ToList()
+                : Contacts.OrderByDescending(c => c.FirstName).ToList();
+
+            Contacts.Clear();
+            foreach (var c in sorted)
+            {
+                Contacts.Add(c);
+            }
+            sortAscending = !sortAscending;
+        }
+
+
 
     }
 }
