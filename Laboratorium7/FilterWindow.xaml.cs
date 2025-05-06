@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace Laboratorium7
 {
@@ -37,9 +25,9 @@ namespace Laboratorium7
         {
             bool isEmail = EmailCheckBox.IsChecked == true ? true : (bool)false;
             bool isPhone = PhoneCheckBox.IsChecked == true ? true : (bool)false;
-            
+
             bool isLastName = LastNameCheckBox.IsChecked == true ? true : (bool)false;
-            
+
             SelectedFilter = new Filter
             {
                 isEmail = isEmail,

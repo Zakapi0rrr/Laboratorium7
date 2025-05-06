@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -14,6 +15,11 @@ namespace Laboratorium7
             this.DataContext = this;
             EnsureDbCreated();
             LoadContacts();
+            using (var db = new ContactContext())
+            {
+                //db.Database.EnsureDeleted();   // ← wymusza usunięcie starej bazy
+               // db.Database.EnsureCreated();   // ← tworzy nową z aktualną strukturą
+            }
         }
         private void EnsureDbCreated()
         {
@@ -23,7 +29,7 @@ namespace Laboratorium7
             }
 
         }
-        /*public class ContactContext : DbContext
+        public class ContactContext : DbContext
         {
             
             public DbSet<Person> Contacts { get; set; }
@@ -32,7 +38,7 @@ namespace Laboratorium7
             {
                 optionsBuilder.UseSqlite("Data Source=contacts.db");
             }
-        }*/
+        }
 
         private void AddContact_Click(object sender, RoutedEventArgs e)
         {
@@ -116,7 +122,7 @@ namespace Laboratorium7
             }
 
 
-           
+
         }
 
         private void FilterContact_Click(object sender, RoutedEventArgs e)
@@ -130,7 +136,7 @@ namespace Laboratorium7
             {
                 var query = context.Contacts.AsQueryable();
 
-                if(filter.isEmail == true)
+                if (filter.isEmail == true)
                 {
                     query = query.Where(c => !string.IsNullOrEmpty(c.Email));
                 }
