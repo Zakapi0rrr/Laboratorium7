@@ -83,6 +83,7 @@ namespace Laboratorium7
                 return;
             }
 
+
             NewPerson = new Person
             {
                 FirstName = FirstName,
@@ -92,6 +93,7 @@ namespace Laboratorium7
                 Address = Address
             };
 
+            ListUpdated?.Invoke(); // Wywołanie zdarzenia, aby zaktualizować listę w głównym oknie
             DialogResult = true;
             Close();
         }
@@ -108,5 +110,6 @@ namespace Laboratorium7
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        public event Action ListUpdated;
     }
 }

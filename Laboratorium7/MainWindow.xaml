@@ -32,6 +32,8 @@
         <Button Content="Edytuj Kontakt" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="120,220,0,0" Click="EditContact_Click"/>
         <Button Content="Usuń Kontakt" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="230,220,0,0" Click="DeleteContact_Click"/>
         <Button Content="Filtruj Kontakty" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="340,220,0,0" Click="FilterContact_Click"/>
-        <Button Content="Sortuj Kontakty" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="450,220,0,0" Click="SortContact_Click"/>
+        <Button Content="MOGUS" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="450,300,0,0" Click="Aogus_Click"/>
+        
+        
     </Grid>
 </Window>

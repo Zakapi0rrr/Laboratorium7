@@ -7,8 +7,16 @@ using System.Threading.Tasks;
 
 namespace Laboratorium7
 {
-    class ContactContext : DbContext
+    public class ContactContext : DbContext
     {
+        public void EnsureDbCreated()
+        {
+            using (var context = new ContactContext())
+            {
+                context.Database.EnsureCreated();
+            }
+
+        }
         public DbSet<Person> Contacts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -17,5 +25,4 @@ namespace Laboratorium7
         }
     }
     
-    }
-
+}

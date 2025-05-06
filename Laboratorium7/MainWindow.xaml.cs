@@ -1,17 +1,37 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace Laboratorium7
 {
     public partial class MainWindow : Window
     {
-        public ObservableCollection<Person> Contacts { get; } = new ObservableCollection<Person>();
+        public ObservableCollection<Person> Contacts { get; set; } = new ObservableCollection<Person>();
 
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = this;
-            // (Dodano teraz) Powiązanie kontrolki ListBox z kolekcją Contacts
+            EnsureDbCreated();
+            LoadContacts();
+        }
+        private void EnsureDbCreated()
+        {
+            using (var context = new ContactContext())
+            {
+                context.Database.EnsureCreated();
+            }
+
+        }
+        public class ContactContext : DbContext
+        {
+            
+            public DbSet<Person> Contacts { get; set; }
+
+            protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            {
+                optionsBuilder.UseSqlite("Data Source=contacts.db");
+            }
         }
 
         private void AddContact_Click(object sender, RoutedEventArgs e)
@@ -23,14 +43,22 @@ namespace Laboratorium7
             if (addWindow.ShowDialog() == true)
             {
                 // (Dodano teraz) Dodanie nowego kontaktu tylko, jeśli użytkownik kliknął OK w oknie dodawania
-                Contacts.Add(new Person
+                var newPerson = new Person
                 {
                     FirstName = addWindow.FirstName,
                     LastName = addWindow.LastName,
                     Email = addWindow.Email,
                     Phone = addWindow.Phone,
                     Address = addWindow.Address
-                });
+                };
+                using (var context = new ContactContext())
+                {
+                    context.Contacts.Add(newPerson);
+                    context.SaveChanges();
+                }
+                Contacts.Add(newPerson);
+                LoadContacts();
+
             }
         }
 
@@ -63,6 +91,13 @@ namespace Laboratorium7
                 selectedPerson.Phone = editWindow.Phone;
                 selectedPerson.Address = editWindow.Address;
             }
+            using (var context = new ContactContext())
+            {
+                context.Contacts.Update(selectedPerson);
+                context.SaveChanges();
+                LoadContacts();
+
+            }
         }
 
         private void DeleteContact_Click(object sender, RoutedEventArgs e)
@@ -90,6 +125,24 @@ namespace Laboratorium7
             var sortWindow = new SortWindow();
             sortWindow.Title = "Sortuj kontakty";
             sortWindow.ShowDialog();
+        }
+
+        private void LoadContacts()
+        {
+            Contacts.Clear();
+            using (var context = new ContactContext())
+            {
+                var contacts = context.Contacts.ToList();
+                foreach (var contact in contacts)
+                {
+                    Contacts.Add(contact);
+                }
+            }
+        }
+
+        private void Aogus_Click(object sender, RoutedEventArgs e)
+        {
+            LoadContacts();
         }
     }
 }
