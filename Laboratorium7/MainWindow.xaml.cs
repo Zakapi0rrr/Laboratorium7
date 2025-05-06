@@ -23,7 +23,7 @@ namespace Laboratorium7
             }
 
         }
-        public class ContactContext : DbContext
+        /*public class ContactContext : DbContext
         {
             
             public DbSet<Person> Contacts { get; set; }
@@ -32,7 +32,7 @@ namespace Laboratorium7
             {
                 optionsBuilder.UseSqlite("Data Source=contacts.db");
             }
-        }
+        }*/
 
         private void AddContact_Click(object sender, RoutedEventArgs e)
         {
@@ -107,10 +107,16 @@ namespace Laboratorium7
                 MessageBox.Show("Proszę wybrać kontakt do usunięcia.");
                 return;
             }
+            using (var context = new ContactContext())
+            {
+                var selectedPerson = (Person)ContactsListBox.SelectedItem;
+                context.Contacts.Remove(selectedPerson);
+                context.SaveChanges();
+                LoadContacts();
+            }
 
-            var selectedPerson = (Person)ContactsListBox.SelectedItem;
-            // (Dodano teraz) Usuwanie wybranego kontaktu z kolekcji
-            Contacts.Remove(selectedPerson);
+
+           
         }
 
         private void FilterContact_Click(object sender, RoutedEventArgs e)
@@ -118,6 +124,25 @@ namespace Laboratorium7
             var filterWindow = new FilterWindow();
             filterWindow.Title = "Filtruj kontakty";
             filterWindow.ShowDialog();
+            //odwolanie do selected filter :)
+            var filter = filterWindow.SelectedFilter;
+            using (var context = new ContactContext())
+            {
+                var query = context.Contacts.AsQueryable();
+
+                if(filter.isEmail == true)
+                {
+                    query = query.Where(c => !string.IsNullOrEmpty(c.Email));
+                }
+                if (filter.isPhone == true)
+                {
+                    query = query.Where(c => c.Phone != 0);
+                }
+                if (filter.isLastName == true)
+                {
+                    query = query.Where(c => !string.IsNullOrEmpty(c.LastName));
+                }
+            }
         }
 
         private void SortContact_Click(object sender, RoutedEventArgs e)
@@ -144,5 +169,6 @@ namespace Laboratorium7
         {
             LoadContacts();
         }
+
     }
 }

@@ -6,7 +6,19 @@
         xmlns:local="clr-namespace:Laboratorium7"
         mc:Ignorable="d"
         Title="FilterWindow" Height="450" Width="800">
-    <Grid>
-        
+    
+    <Grid>  
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical" Margin="10">
+            <CheckBox x:Name="EmailCheckBox" Content="Czy posiada email?" Margin="5"/>
+            <CheckBox x:Name="PhoneCheckBox" Content="Czy posiada telefon?" Margin="5"/>
+            <CheckBox x:Name="LastNameCheckBox" Content="Czy posiada nazwisko?" Margin="5"/>
+            <Button Content="Zastosuj filtr" Click="ApplyFilter_Click" Margin="5"/>
+        </StackPanel>
+
     </Grid>
 </Window>

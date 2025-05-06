@@ -76,10 +76,9 @@ namespace Laboratorium7
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) ||
-                string.IsNullOrWhiteSpace(Email) || Phone <= 0 || string.IsNullOrWhiteSpace(Address))
+            if (string.IsNullOrWhiteSpace(FirstName))
             {
-                MessageBox.Show("Wszystkie pola muszą być wypełnione.");
+                MessageBox.Show("Pole 'Imię' jest obowiązkowe!");
                 return;
             }
 
