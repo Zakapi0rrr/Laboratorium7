@@ -3,9 +3,7 @@ using System.Windows;
 
 namespace Laboratorium7
 {
-    /// <summary>
-    /// Logika interakcji dla klasy AddWindow.xaml
-    /// </summary>
+
     public partial class AddWindow : Window, INotifyPropertyChanged
     {
         private string _firstName;
@@ -64,7 +62,6 @@ namespace Laboratorium7
             }
         }
 
-        // Właściwość, która przechowa dane po kliknięciu "Zapisz"
         public Person NewPerson { get; private set; }
 
         public AddWindow()
@@ -91,7 +88,7 @@ namespace Laboratorium7
                 Address = Address
             };
 
-            ListUpdated?.Invoke(); // Wywołanie zdarzenia, aby zaktualizować listę w głównym oknie
+            ListUpdated?.Invoke();
             DialogResult = true;
             Close();
         }

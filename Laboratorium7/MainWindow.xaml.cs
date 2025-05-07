@@ -17,8 +17,8 @@ namespace Laboratorium7
             LoadContacts();
             using (var db = new ContactContext())
             {
-                //db.Database.EnsureDeleted();   // ← wymusza usunięcie starej bazy
-               // db.Database.EnsureCreated();   // ← tworzy nową z aktualną strukturą
+                //db.Database.EnsureDeleted(); 
+                // db.Database.EnsureCreated();  
             }
         }
         private void EnsureDbCreated()
@@ -31,7 +31,7 @@ namespace Laboratorium7
         }
         public class ContactContext : DbContext
         {
-            
+
             public DbSet<Person> Contacts { get; set; }
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -48,7 +48,6 @@ namespace Laboratorium7
             // Wywołanie ShowDialog tylko raz
             if (addWindow.ShowDialog() == true)
             {
-                // (Dodano teraz) Dodanie nowego kontaktu tylko, jeśli użytkownik kliknął OK w oknie dodawania
                 var newPerson = new Person
                 {
                     FirstName = addWindow.FirstName,
@@ -90,7 +89,6 @@ namespace Laboratorium7
 
             if (editWindow.ShowDialog() == true)
             {
-                // (Dodano teraz) Zaktualizowanie wybranego kontaktu w kolekcji
                 selectedPerson.FirstName = editWindow.FirstName;
                 selectedPerson.LastName = editWindow.LastName;
                 selectedPerson.Email = editWindow.Email;
@@ -195,7 +193,43 @@ namespace Laboratorium7
             sortAscending = !sortAscending;
         }
 
+        private void Search_Click(object sender, RoutedEventArgs e)
+        {
+            var searchWindow = new SearchWindow();
+            searchWindow.Title = "Wyszukaj kontakty";
+            var result = searchWindow.ShowDialog();
 
+            if (result == true)
+            {
+                string searchText = searchWindow.SearchText;
+                string selectedRadioButton = searchWindow.SelectedRadioButton;
 
+                using (var context = new ContactContext())
+                {
+                    var query = context.Contacts.AsQueryable();
+
+                    if (selectedRadioButton == "Email")
+                    {
+                        query = query.Where(c => c.Email.Contains(searchText));
+                    }
+                    else if (selectedRadioButton == "Phone")
+                    {
+                        //parse na string
+
+                        query = query.Where(c => c.Phone.ToString().Contains(searchText));
+                    }
+                    else if (selectedRadioButton == "LastName")
+                    {
+                        query = query.Where(c => c.LastName.Contains(searchText));
+                    }
+
+                    Contacts.Clear();
+                    foreach (var contact in query.ToList())
+                    {
+                        Contacts.Add(contact);
+                    }
+                }
+            }
+        }
     }
 }
